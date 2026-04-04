@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración - Bellas Boutique</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-brand">Bellas Boutique</a>
+      <div class="navbar-links">
+        <a href="index.html">
+          <span>Inicio</span>
+        </a>
+        <a href="support.html">
+          <span>Soporte</span>
+        </a>
+        <a href="cart.html" class="cart-badge">
+          <span>Carrito</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <a href="login.html">
+          <span>Perfil</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Admin Layout -->
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+      <h2 class="admin-sidebar-title">Panel Admin</h2>
+      
+      <div class="admin-nav">
+        <button class="admin-nav-item active" onclick="showTab('products')">
+          <span>📦</span>
+          <span>Productos</span>
+        </button>
+        
+        <button class="admin-nav-item" onclick="showTab('users')">
+          <span>👥</span>
+          <span>Usuarios</span>
+        </button>
+        
+        <button class="admin-nav-item" onclick="showTab('sales')">
+          <span>📈</span>
+          <span>Ventas</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+      <!-- Products Tab -->
+      <div id="products-tab">
+        <div class="admin-header">
+          <h1>Productos</h1>
+          <button class="btn btn-primary">Agregar Nuevo Producto</button>
+        </div>
+
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="productsTable">
+              <!-- Products will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Users Tab -->
+      <div id="users-tab" style="display: none;">
+        <h1 class="mb-6">Usuarios</h1>
+
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Pedidos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>María González</td>
+                <td style="color: var(--text-gray);">maria@ejemplo.com</td>
+                <td>5</td>
+              </tr>
+              <tr>
+                <td>Juan Pérez</td>
+                <td style="color: var(--text-gray);">juan@ejemplo.com</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>Ana Rodríguez</td>
+                <td style="color: var(--text-gray);">ana@ejemplo.com</td>
+                <td>8</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sales Tab -->
+      <div id="sales-tab" style="display: none;">
+        <h1 class="mb-6">Ventas</h1>
+
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID Pedido</th>
+                <th>Cliente</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#1001</td>
+                <td>María González</td>
+                <td style="color: var(--primary-color);">$189.98</td>
+                <td style="color: var(--text-gray);">2026-04-02</td>
+              </tr>
+              <tr>
+                <td>#1002</td>
+                <td>Juan Pérez</td>
+                <td style="color: var(--primary-color);">$79.99</td>
+                <td style="color: var(--text-gray);">2026-04-02</td>
+              </tr>
+              <tr>
+                <td>#1003</td>
+                <td>Ana Rodríguez</td>
+                <td style="color: var(--primary-color);">$259.97</td>
+                <td style="color: var(--text-gray);">2026-04-01</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+      updateCartCount();
+    });
+
+    function loadProducts() {
+      const products = getProducts();
+      const tbody = document.getElementById('productsTable');
+      
+      tbody.innerHTML = products.map(product => {
+        const stock = Math.floor(Math.random() * 50) + 10;
+        return `
+          <tr>
+            <td>${product.name}</td>
+            <td style="color: var(--text-gray);">${product.category}</td>
+            <td>$${product.price.toFixed(2)}</td>
+            <td>${stock}</td>
+            <td>
+              <div class="table-actions">
+                <button class="btn-icon" onclick="editProduct(${product.id})">✏️</button>
+                <button class="btn-icon" onclick="deleteProduct(${product.id})" style="color: #ef4444;">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function showTab(tabName) {
+      // Hide all tabs
+      document.getElementById('products-tab').style.display = 'none';
+      document.getElementById('users-tab').style.display = 'none';
+      document.getElementById('sales-tab').style.display = 'none';
+
+      // Remove active class from all nav items
+      document.querySelectorAll('.admin-nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById(`${tabName}-tab`).style.display = 'block';
+
+      // Add active class to clicked nav item
+      event.target.closest('.admin-nav-item').classList.add('active');
+    }
+
+    function editProduct(id) {
+      alert(`Editar producto ${id} - Función próximamente`);
+    }
+
+    function deleteProduct(id) {
+      if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        alert(`Producto ${id} eliminado`);
+        loadProducts();
+      }
+    }
+  </script>
+</body>
+</html>

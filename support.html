@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soporte - Bellas Boutique</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-brand">Bellas Boutique</a>
+      <div class="navbar-links">
+        <a href="index.html">
+          <span>Inicio</span>
+        </a>
+        <a href="support.html">
+          <span>Soporte</span>
+        </a>
+        <a href="cart.html" class="cart-badge">
+          <span>Carrito</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <a href="login.html">
+          <span>Perfil</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container-md">
+    <h1 class="mb-8">Soporte</h1>
+
+    <!-- FAQ Section -->
+    <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-gray); margin-bottom: 2rem;">
+      <h2 class="mb-4">Preguntas Frecuentes</h2>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(0)">
+            <span>¿Cómo puedo rastrear mi pedido?</span>
+            <span id="icon-0">▼</span>
+          </button>
+          <div class="accordion-content" id="content-0">
+            Una vez que tu pedido sea enviado, recibirás un correo electrónico con un número de rastreo.
+            Puedes usar este número para rastrear tu paquete en nuestro sitio web o en el sitio del transportista.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(1)">
+            <span>¿Cuál es su política de devoluciones?</span>
+            <span id="icon-1">▼</span>
+          </button>
+          <div class="accordion-content" id="content-1">
+            Aceptamos devoluciones dentro de los 30 días posteriores a la compra. Los artículos deben estar sin usar, sin lavar
+            y en su condición original con etiquetas adjuntas. Por favor contacta a nuestro equipo de soporte para iniciar una devolución.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(2)">
+            <span>¿Cuánto tarda el envío?</span>
+            <span id="icon-2">▼</span>
+          </button>
+          <div class="accordion-content" id="content-2">
+            El envío estándar generalmente toma de 5 a 7 días hábiles. El envío express está disponible
+            y toma de 2 a 3 días hábiles. Los pedidos internacionales pueden tardar de 10 a 15 días hábiles.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(3)">
+            <span>¿Realizan envíos internacionales?</span>
+            <span id="icon-3">▼</span>
+          </button>
+          <div class="accordion-content" id="content-3">
+            Sí, enviamos a la mayoría de países del mundo. Los costos de envío y tiempos de entrega
+            varían según la ubicación. Puedes ver el costo de envío durante el proceso de compra.
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" onclick="toggleAccordion(4)">
+            <span>¿Qué métodos de pago aceptan?</span>
+            <span id="icon-4">▼</span>
+          </button>
+          <div class="accordion-content" id="content-4">
+            Aceptamos tarjetas de crédito/débito (Visa, Mastercard, American Express), SINPE Móvil
+            y transferencias bancarias. Todos los pagos se procesan de forma segura.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-gray);">
+      <h2 class="mb-4">Contáctanos</h2>
+      <p style="color: var(--text-gray); margin-bottom: 1.5rem;">
+        ¿No encuentras lo que buscas? Envíanos un mensaje y te ayudaremos.
+      </p>
+
+      <form onsubmit="handleContact(event)" class="space-y-4">
+        <div class="form-group">
+          <label class="form-label" for="name">Nombre</label>
+          <input 
+            type="text" 
+            id="name" 
+            class="form-input" 
+            placeholder="Tu nombre" 
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Correo Electrónico</label>
+          <input 
+            type="email" 
+            id="email" 
+            class="form-input" 
+            placeholder="tu@email.com" 
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Mensaje</label>
+          <textarea 
+            id="message" 
+            class="form-textarea" 
+            placeholder="¿Cómo podemos ayudarte?" 
+            rows="5" 
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Enviar Mensaje</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCartCount();
+    });
+
+    function toggleAccordion(index) {
+      const content = document.getElementById(`content-${index}`);
+      const icon = document.getElementById(`icon-${index}`);
+      
+      if (content.classList.contains('active')) {
+        content.classList.remove('active');
+        icon.textContent = '▼';
+      } else {
+        // Close all others
+        document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('[id^="icon-"]').forEach(i => i.textContent = '▼');
+        
+        // Open this one
+        content.classList.add('active');
+        icon.textContent = '▲';
+      }
+    }
+
+    function handleContact(event) {
+      event.preventDefault();
+      alert('¡Mensaje enviado! Nos pondremos en contacto contigo pronto.');
+      event.target.reset();
+    }
+  </script>
+</body>
+</html>

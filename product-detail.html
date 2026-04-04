@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle del Producto - Bellas Boutique</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-brand">Bellas Boutique</a>
+      <div class="navbar-links">
+        <a href="index.html">
+          <span>Inicio</span>
+        </a>
+        <a href="support.html">
+          <span>Soporte</span>
+        </a>
+        <a href="cart.html" class="cart-badge">
+          <span>Carrito</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <a href="login.html">
+          <span>Perfil</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <a href="index.html" class="link" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+      <span>←</span>
+      <span>Volver a productos</span>
+    </a>
+
+    <div class="product-detail-grid" id="productDetail">
+      <!-- Product details will be loaded here -->
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProductDetail();
+      updateCartCount();
+    });
+
+    function loadProductDetail() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = parseInt(urlParams.get('id'));
+      
+      const products = getProducts();
+      const product = products.find(p => p.id === productId);
+
+      if (!product) {
+        document.getElementById('productDetail').innerHTML = `
+          <div class="text-center">
+            <h2>Producto no encontrado</h2>
+            <a href="index.html" class="btn btn-primary mt-4">Volver al Inicio</a>
+          </div>
+        `;
+        return;
+      }
+
+      document.getElementById('productDetail').innerHTML = `
+        <div>
+          <img src="${product.image}" alt="${product.name}" class="product-detail-image">
+        </div>
+        <div class="product-detail-info">
+          <h1 style="font-size: 1.875rem; margin-bottom: 1rem;">${product.name}</h1>
+          <p class="product-category">${product.category}</p>
+          <p style="font-size: 1.875rem; color: var(--primary-color); margin-bottom: 1.5rem;">
+            $${product.price.toFixed(2)}
+          </p>
+          <p class="product-description">${product.description}</p>
+          <div class="space-y-4">
+            <button class="btn btn-primary btn-full" onclick="addToCart(${product.id}); window.location.href='cart.html';">
+              Agregar al Carrito
+            </button>
+            <button class="btn btn-outline btn-full" onclick="window.location.href='index.html';">
+              Seguir Comprando
+            </button>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
