@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bellas Boutique - Mi Perfil</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Bellas Boutique</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <span>🏠</span>
+                    <span class="nav-text">Inicio</span>
+                </a>
+                <a href="support.html" class="nav-link">
+                    <span>❓</span>
+                    <span class="nav-text">Soporte</span>
+                </a>
+                <a href="cart.html" class="nav-link cart-link">
+                    <span>🛒</span>
+                    <span class="nav-text">Carrito</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <span>👤</span>
+                    <span class="nav-text">Perfil</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Mi Perfil</h1>
+
+        <div class="profile-layout">
+            <!-- User Information -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div>
+                        <h2 class="profile-name">María González</h2>
+                        <p class="profile-role">Cliente</p>
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    <div class="info-row">
+                        <span class="info-row-label">Correo Electrónico</span>
+                        <span class="info-row-value">maria@email.com</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-row-label">Teléfono</span>
+                        <span class="info-row-value">+506 8888-8888</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-row-label">Dirección</span>
+                        <span class="info-row-value">San José, Costa Rica</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline" onclick="handleLogout()">
+                    🚪 Cerrar Sesión
+                </button>
+            </div>
+
+            <!-- Order History -->
+            <div class="profile-card">
+                <div class="order-header">
+                    <span class="order-icon">📦</span>
+                    <h2 style="font-size: 1.5rem;">Historial de Pedidos</h2>
+                </div>
+
+                <div class="order-list">
+                    <div class="order-item">
+                        <div class="order-item-header">
+                            <div>
+                                <h3 class="order-id">Pedido #1001</h3>
+                                <p class="order-date">2026-04-02</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p class="order-status status-delivered">Entregado</p>
+                                <p class="order-total">$189.98</p>
+                            </div>
+                        </div>
+                        <div class="order-items">
+                            <div class="order-item-row">
+                                <span class="order-item-name">Vestido Elegante de Verano x 2</span>
+                                <span class="order-item-price">$179.98</span>
+                            </div>
+                            <div class="order-item-row">
+                                <span class="order-item-name">Collar de Oro x 1</span>
+                                <span class="order-item-price">$9.99</span>
+                            </div>
+                        </div>
+                        <div class="order-footer">
+                            <button class="btn btn-outline" style="width: auto; padding: 0.5rem 1rem;">
+                                Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="order-item">
+                        <div class="order-item-header">
+                            <div>
+                                <h3 class="order-id">Pedido #0998</h3>
+                                <p class="order-date">2026-03-25</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p class="order-status status-transit">En tránsito</p>
+                                <p class="order-total">$79.99</p>
+                            </div>
+                        </div>
+                        <div class="order-items">
+                            <div class="order-item-row">
+                                <span class="order-item-name">Tacones Clásicos x 1</span>
+                                <span class="order-item-price">$79.99</span>
+                            </div>
+                        </div>
+                        <div class="order-footer">
+                            <button class="btn btn-outline" style="width: auto; padding: 0.5rem 1rem;">
+                                Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="order-item">
+                        <div class="order-item-header">
+                            <div>
+                                <h3 class="order-id">Pedido #0985</h3>
+                                <p class="order-date">2026-03-15</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p class="order-status status-delivered">Entregado</p>
+                                <p class="order-total">$199.98</p>
+                            </div>
+                        </div>
+                        <div class="order-items">
+                            <div class="order-item-row">
+                                <span class="order-item-name">Bolso de Diseñador x 1</span>
+                                <span class="order-item-price">$129.99</span>
+                            </div>
+                            <div class="order-item-row">
+                                <span class="order-item-name">Gafas de Sol Fashion x 1</span>
+                                <span class="order-item-price">$59.99</span>
+                            </div>
+                        </div>
+                        <div class="order-footer">
+                            <button class="btn btn-outline" style="width: auto; padding: 0.5rem 1rem;">
+                                Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="cart-utils.js"></script>
+    <script>
+        function handleLogout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,102 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bellas Boutique - Inicio</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bellas Boutique - Catálogo</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="index.html" class="navbar-brand">Bellas Boutique</a>
-      <div class="navbar-links">
-        <a href="index.html">
-          <span>Inicio</span>
-        </a>
-        <a href="support.html">
-          <span>Soporte</span>
-        </a>
-        <a href="cart.html" class="cart-badge">
-          <span>Carrito</span>
-          <span class="cart-count" id="cartCount">0</span>
-        </a>
-        <a href="login.html">
-          <span>Perfil</span>
-        </a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="container">
-    <!-- Hero Section -->
-    <div class="hero">
-      <h1>Bienvenido a Bellas Boutique</h1>
-      <p>Descubre nuestra elegante colección</p>
-    </div>
-
-    <!-- Category Filters -->
-    <div class="category-filters">
-      <button class="category-btn active" onclick="filterCategory('All')">Todo</button>
-      <button class="category-btn" onclick="filterCategory('Vestidos')">Vestidos</button>
-      <button class="category-btn" onclick="filterCategory('Blusas')">Blusas</button>
-      <button class="category-btn" onclick="filterCategory('Zapatos')">Zapatos</button>
-      <button class="category-btn" onclick="filterCategory('Accesorios')">Accesorios</button>
-      <button class="category-btn" onclick="filterCategory('Joyería')">Joyería</button>
-    </div>
-
-    <!-- Product Grid -->
-    <div class="product-grid" id="productGrid">
-      <!-- Products will be loaded here by JavaScript -->
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-  <script>
-    // Load products on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      displayProducts();
-      updateCartCount();
-    });
-
-    function filterCategory(category) {
-      // Update active button
-      document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      event.target.classList.add('active');
-
-      // Filter and display products
-      displayProducts(category);
-    }
-
-    function displayProducts(category = 'All') {
-      const grid = document.getElementById('productGrid');
-      const products = getProducts();
-      
-      const filtered = category === 'All' 
-        ? products 
-        : products.filter(p => p.category === category);
-
-      grid.innerHTML = filtered.map(product => `
-        <div class="product-card" data-category="${product.category}">
-          <img src="${product.image}" alt="${product.name}" class="product-image" onclick="viewProduct(${product.id})">
-          <div class="product-info">
-            <h3 class="product-name">${product.name}</h3>
-            <p class="product-price">$${product.price.toFixed(2)}</p>
-          </div>
-          <div class="product-actions">
-            <button class="btn btn-primary btn-full" onclick="addToCart(${product.id})">Agregar al Carrito</button>
-          </div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Bellas Boutique</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <span>🏠</span>
+                    <span class="nav-text">Inicio</span>
+                </a>
+                <a href="support.html" class="nav-link">
+                    <span>❓</span>
+                    <span class="nav-text">Soporte</span>
+                </a>
+                <a href="cart.html" class="nav-link cart-link">
+                    <span>🛒</span>
+                    <span class="nav-text">Carrito</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <span>👤</span>
+                    <span class="nav-text">Perfil</span>
+                </a>
+            </div>
         </div>
-      `).join('');
-    }
+    </nav>
 
-    function viewProduct(id) {
-      window.location.href = `product-detail.html?id=${id}`;
-    }
-  </script>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Bienvenido a Bellas Boutique</h1>
+            <p class="hero-subtitle">Descubre nuestra elegante colección</p>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="category-filter" id="categoryFilter">
+            <button class="category-btn active" data-category="Todo">Todo</button>
+            <button class="category-btn" data-category="Vestidos">Vestidos</button>
+            <button class="category-btn" data-category="Blusas">Blusas</button>
+            <button class="category-btn" data-category="Zapatos">Zapatos</button>
+            <button class="category-btn" data-category="Accesorios">Accesorios</button>
+            <button class="category-btn" data-category="Joyería">Joyería</button>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid" id="productGrid"></div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="cart-utils.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

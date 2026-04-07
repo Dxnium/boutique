@@ -1,207 +1,179 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pago - Bellas Boutique</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bellas Boutique - Pago</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="index.html" class="navbar-brand">Bellas Boutique</a>
-      <div class="navbar-links">
-        <a href="index.html">
-          <span>Inicio</span>
-        </a>
-        <a href="support.html">
-          <span>Soporte</span>
-        </a>
-        <a href="cart.html" class="cart-badge">
-          <span>Carrito</span>
-          <span class="cart-count" id="cartCount">0</span>
-        </a>
-        <a href="login.html">
-          <span>Perfil</span>
-        </a>
-      </div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Bellas Boutique</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <span>🏠</span>
+                    <span class="nav-text">Inicio</span>
+                </a>
+                <a href="support.html" class="nav-link">
+                    <span>❓</span>
+                    <span class="nav-text">Soporte</span>
+                </a>
+                <a href="cart.html" class="nav-link cart-link">
+                    <span>🛒</span>
+                    <span class="nav-text">Carrito</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <span>👤</span>
+                    <span class="nav-text">Perfil</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Pago</h1>
+        <div class="checkout-layout" id="checkoutContent"></div>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <div class="container">
-    <h1 class="mb-8">Pago</h1>
+    <script src="data.js"></script>
+    <script src="cart-utils.js"></script>
+    <script>
+        let selectedPayment = 'card';
 
-    <div class="cart-grid">
-      <!-- Payment Method -->
-      <div class="space-y-6">
-        <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-gray);">
-          <h2 class="mb-4">Selecciona Método de Pago</h2>
-          
-          <div class="payment-methods">
-            <button class="payment-method active" onclick="selectPayment('card')">
-              <span>💳</span>
-              <span>Tarjeta de Crédito / Débito</span>
-            </button>
+        function renderCheckout() {
+            const cart = getCart();
             
-            <button class="payment-method" onclick="selectPayment('sinpe')">
-              <span>📱</span>
-              <span>SINPE Móvil</span>
-            </button>
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            const total = getCartTotal();
+            const container = document.getElementById('checkoutContent');
+
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="checkout-section">
+                        <h2 class="section-title">Selecciona Método de Pago</h2>
+                        <div class="payment-methods">
+                            <button class="payment-option active" onclick="selectPayment('card')" id="paymentCard">
+                                <span>💳</span>
+                                <span>Tarjeta de Crédito / Débito</span>
+                            </button>
+                            <button class="payment-option" onclick="selectPayment('sinpe')" id="paymentSinpe">
+                                <span>📱</span>
+                                <span>SINPE Móvil</span>
+                            </button>
+                            <button class="payment-option" onclick="selectPayment('transfer')" id="paymentTransfer">
+                                <span>🏦</span>
+                                <span>Transferencia Bancaria</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="checkout-section">
+                        <h2 class="section-title">Detalles de Pago</h2>
+                        <div id="paymentDetails"></div>
+                    </div>
+                </div>
+
+                <div class="order-summary">
+                    <h2 class="summary-title">Resumen de Pedido</h2>
+                    <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+                        ${cart.map(item => `
+                            <div class="summary-row" style="font-size: 0.875rem; margin-bottom: 0.75rem;">
+                                <span style="color: #6b7280;">${item.name} x ${item.quantity}</span>
+                                <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>$${total.toFixed(2)}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Envío</span>
+                        <span>Gratis</span>
+                    </div>
+                    <hr class="summary-divider">
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span class="total-amount">$${total.toFixed(2)}</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="handleConfirmPurchase()">
+                        Confirmar Compra
+                    </button>
+                </div>
+            `;
+
+            updatePaymentDetails();
+        }
+
+        function selectPayment(method) {
+            selectedPayment = method;
             
-            <button class="payment-method" onclick="selectPayment('transfer')">
-              <span>🏦</span>
-              <span>Transferencia Bancaria</span>
-            </button>
-          </div>
-        </div>
+            document.querySelectorAll('.payment-option').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('payment' + method.charAt(0).toUpperCase() + method.slice(1)).classList.add('active');
+            
+            updatePaymentDetails();
+        }
 
-        <!-- Payment Details -->
-        <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-gray);">
-          <h2 class="mb-4">Detalles de Pago</h2>
-          
-          <div id="paymentDetails">
-            <!-- Card details (default) -->
-            <div class="space-y-4">
-              <div class="form-group">
-                <label class="form-label">Número de Tarjeta</label>
-                <input type="text" class="form-input" placeholder="1234 5678 9012 3456">
-              </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="form-group">
-                  <label class="form-label">Fecha de Vencimiento</label>
-                  <input type="text" class="form-input" placeholder="MM/AA">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">CVV</label>
-                  <input type="text" class="form-input" placeholder="123">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        function updatePaymentDetails() {
+            const detailsContainer = document.getElementById('paymentDetails');
+            
+            if (selectedPayment === 'card') {
+                detailsContainer.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Número de Tarjeta</label>
+                        <input type="text" class="form-input" placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Fecha de Vencimiento</label>
+                            <input type="text" class="form-input" placeholder="MM/AA">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CVV</label>
+                            <input type="text" class="form-input" placeholder="123">
+                        </div>
+                    </div>
+                `;
+            } else if (selectedPayment === 'sinpe') {
+                detailsContainer.innerHTML = `
+                    <p style="color: #6b7280; margin-bottom: 1rem;">Por favor envía el pago a:</p>
+                    <div class="payment-info-box">
+                        <p class="info-label">Número de Teléfono</p>
+                        <p class="info-value">+506 8888-8888</p>
+                    </div>
+                `;
+            } else {
+                detailsContainer.innerHTML = `
+                    <p style="color: #6b7280; margin-bottom: 1rem;">Por favor transfiere a la siguiente cuenta:</p>
+                    <div class="payment-info-box">
+                        <div style="margin-bottom: 0.5rem;">
+                            <p class="info-label">Banco</p>
+                            <p>Banco Nacional</p>
+                        </div>
+                        <div>
+                            <p class="info-label">Número de Cuenta</p>
+                            <p>CR12345678901234567890</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
 
-      <!-- Order Summary -->
-      <div>
-        <div class="summary-card">
-          <h2 class="summary-title">Resumen de Pedido</h2>
-          
-          <div id="orderItems" class="mb-4" style="padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray);">
-            <!-- Order items will be loaded here -->
-          </div>
+        function handleConfirmPurchase() {
+            alert('¡Compra confirmada! Gracias por comprar en Bellas Boutique.');
+            clearCart();
+            window.location.href = 'index.html';
+        }
 
-          <div class="summary-row">
-            <span>Subtotal</span>
-            <span id="subtotal">$0.00</span>
-          </div>
-          <div class="summary-row">
-            <span>Envío</span>
-            <span>Gratis</span>
-          </div>
-          
-          <div class="summary-divider"></div>
-          
-          <div class="summary-total">
-            <span>Total</span>
-            <span class="summary-total-amount" id="total">$0.00</span>
-          </div>
-          
-          <button class="btn btn-primary btn-full" onclick="confirmPurchase()">Confirmar Compra</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      loadCheckout();
-      updateCartCount();
-    });
-
-    function loadCheckout() {
-      const cart = getCart();
-      
-      if (cart.length === 0) {
-        window.location.href = 'cart.html';
-        return;
-      }
-
-      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      
-      // Display order items
-      document.getElementById('orderItems').innerHTML = cart.map(item => `
-        <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.75rem;">
-          <span style="color: var(--text-gray);">${item.name} x ${item.quantity}</span>
-          <span>$${(item.price * item.quantity).toFixed(2)}</span>
-        </div>
-      `).join('');
-
-      document.getElementById('subtotal').textContent = `$${total.toFixed(2)}`;
-      document.getElementById('total').textContent = `$${total.toFixed(2)}`;
-    }
-
-    function selectPayment(method) {
-      // Update active button
-      document.querySelectorAll('.payment-method').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      event.target.closest('.payment-method').classList.add('active');
-
-      // Update payment details
-      const detailsDiv = document.getElementById('paymentDetails');
-      
-      if (method === 'card') {
-        detailsDiv.innerHTML = `
-          <div class="space-y-4">
-            <div class="form-group">
-              <label class="form-label">Número de Tarjeta</label>
-              <input type="text" class="form-input" placeholder="1234 5678 9012 3456">
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div class="form-group">
-                <label class="form-label">Fecha de Vencimiento</label>
-                <input type="text" class="form-input" placeholder="MM/AA">
-              </div>
-              <div class="form-group">
-                <label class="form-label">CVV</label>
-                <input type="text" class="form-input" placeholder="123">
-              </div>
-            </div>
-          </div>
-        `;
-      } else if (method === 'sinpe') {
-        detailsDiv.innerHTML = `
-          <p style="color: var(--text-gray); margin-bottom: 1rem;">Por favor envía el pago a:</p>
-          <div class="payment-details">
-            <p style="font-size: 0.875rem; color: var(--text-gray);">Número de Teléfono</p>
-            <p style="font-size: 1.125rem;">+506 8888-8888</p>
-          </div>
-        `;
-      } else if (method === 'transfer') {
-        detailsDiv.innerHTML = `
-          <p style="color: var(--text-gray); margin-bottom: 1rem;">Por favor transfiere a la siguiente cuenta:</p>
-          <div class="payment-details" style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <div>
-              <p style="font-size: 0.875rem; color: var(--text-gray);">Banco</p>
-              <p>Banco Nacional</p>
-            </div>
-            <div>
-              <p style="font-size: 0.875rem; color: var(--text-gray);">Número de Cuenta</p>
-              <p>CR12345678901234567890</p>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    function confirmPurchase() {
-      alert('¡Compra confirmada! Gracias por comprar en Bellas Boutique.');
-      localStorage.removeItem('cart');
-      window.location.href = 'index.html';
-    }
-  </script>
+        renderCheckout();
+    </script>
 </body>
 </html>
